@@ -4,6 +4,7 @@ import { executarSQL } from "../database/index.js";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
+    //Esse código tenta executar uma consulta no banco de dados para listar todos os cargos.
     try {
         const comando = await executarSQL("select * from cargos;");
         res.json(comando);

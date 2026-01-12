@@ -4,6 +4,7 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
     try {
+        //Esse comando retorna todas as Ordens de Serviço, adicionando o nome do funcionário e os dados do veículo relacionados. Se algum funcionário ou veículo não existir, a OS ainda será exibida, com os campos correspondentes como NULL.
         const sql = `
             SELECT os.*, f.nome as funcionario_nome, v.modelo as veiculo_modelo, v.placa as veiculo_placa
             FROM OS_Servicos os
@@ -21,7 +22,7 @@ router.post("/", async (req, res) => {
     try {
         const { funcionario_id, veiculo_id, data, valor_total, status_os, observacoes } = req.body;
         const comando = await executarSQL(`insert into os_servicos (funcionario_id, veiculo_id, data, valor_total, status_os, observacoes) values (${funcionario_id}, ${veiculo_id}, '${data}', ${valor_total}, '${status_os}', '${observacoes}');`);
-        res.json({ mensagem: "OS criada com sucesso!" });
+        res.json({ mensagem: "Registro criado com sucesso!" });
     } catch (error) {
         res.json({ mensagem: error.message });
     }
@@ -39,7 +40,7 @@ router.put("/:id", async (req, res) => {
         if (observacoes) os.observacoes = observacoes;
 
         await executarSQL(`update os_servicos set funcionario_id = ${os.funcionario_id}, veiculo_id = ${os.veiculo_id}, data = '${os.data}', valor_total = ${os.valor_total}, status_os = '${os.status_os}', observacoes = '${os.observacoes}' where id = ${req.params.id};`);
-        res.json({ mensagem: "OS atualizada!" });
+        res.json({ mensagem: "Registro atualizado com sucesso!"  });
     } catch (error) {
         res.json({ mensagem: error.message });
     }
@@ -48,7 +49,7 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
     try {
         await executarSQL(`delete from os_servicos where id = ${req.params.id};`);
-        res.json({ mensagem: "OS deletada!" });
+        res.json({ mensagem: "Registro deletado com sucesso!" });
     } catch (error) {
         res.json({ mensagem: error.message });
     }

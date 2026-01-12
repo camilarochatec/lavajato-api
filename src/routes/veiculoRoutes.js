@@ -6,6 +6,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
     try {
         const veiculos = await executarSQL("select * from veiculos;");
+        // Para cada veículo, busca as informações do cliente (nome e telefone) relacionado a esse veículo e adiciona esses dados ao objeto veículo.
         for (const veiculo of veiculos) {
             const [cliente] = await executarSQL(`select id, nome, telefone from clientes where id = ${veiculo.cliente_id};`);
             veiculo.cliente = cliente;
@@ -18,9 +19,9 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
     try {
-        const { cliente_id, modelo, placa, cor, ano, marca, tipo_veiculo, observacoes, data_cadastro, status_pedido} = req.body;
+        const { cliente_id, modelo, placa, cor, ano, marca, tipo_veiculo, observacoes, data_cadastro, status_pedido } = req.body;
 
-        if (!cliente_id || !modelo || !placa || !cor || !ano || !marca || !tipo_veiculo || !observacoes ||!data_cadastro || !status_pedido) {
+        if (!cliente_id || !modelo || !placa || !cor || !ano || !marca || !tipo_veiculo || !observacoes || !data_cadastro || !status_pedido) {
             throw new Error("Falta campos obrigatórios")
         }
 
@@ -42,7 +43,7 @@ router.put("/:id", async (req, res) => {
         const [veiculo] = await executarSQL(`select * from veiculos where id = ${req.params.id}`);
 
         if (!veiculo) {
-           return res.status(404).json({ mensagem: "Veículo não encontrado" });
+            return res.status(404).json({ mensagem: "Veículo não encontrado" });
         }
         if (cliente_id) veiculo.cliente_id = cliente_id;
         if (modelo) veiculo.modelo = modelo;

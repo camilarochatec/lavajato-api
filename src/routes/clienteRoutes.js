@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
     try {
+        //Esse código busca todos os clientes e, para cada cliente, executa uma nova consulta para buscar os veículos associados a ele. Em seguida, adiciona a lista de veículos ao objeto do client
         const clientes = await executarSQL("select * from clientes;");
         for (const cliente of clientes) {
             const [veiculos] = await executarSQL(`select * from veiculos where cliente_id = ${cliente.id};`);

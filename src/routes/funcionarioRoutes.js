@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
     try {
+        //Esse código busca todos os funcionários e, para cada um, busca o cargo correspondente na tabela cargos. Depois, adiciona esse cargo como propriedade do objeto funcionario. No final, retorna todos os funcionários em JSON.
         const funcionarios = await executarSQL("select * from funcionarios;");
         for (const funcionario of funcionarios) {
             const [cargo] = await executarSQL(`select * from cargos where id = ${funcionario.cargo_id};`);
