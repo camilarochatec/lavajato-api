@@ -3,15 +3,15 @@ import { executarSQL } from "../database/index.js";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-    //Esse comando busca todos os registros da tabela servicos_os e adiciona o nome do serviço correspondente, utilizando um INNER JOIN, retornando apenas os registros que possuem correspondência entre as duas tabelas.
     try {
-        const sql = `
-            SELECT sos.*, s.nome as servico_nome
-            FROM servicos_os sos
-            JOIN servicos s ON sos.servicos_id = s.id;
-        `;
-        const comando = await executarSQL(sql);
-        res.json(comando);
+        const vinculacoes = await executarSQL("select * from servicos_os;");
+        
+        for (const vinculo of vinculacoes) {
+            const [servico] = await executarSQL(`select * from servicos where id = ${vinculo.servicos_id};`);
+            vinculo.servico = servico;
+        }
+        
+        res.json(vinculacoes);
     } catch (error) {
         res.json({ mensagem: error.message });
     }

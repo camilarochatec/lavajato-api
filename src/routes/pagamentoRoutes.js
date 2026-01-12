@@ -4,14 +4,14 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
     try {
-        //Esse comando retorna todos os pagamentos, trazendo também o status da Ordem de Serviço relacionada. Como é um INNER JOIN, apenas pagamentos que têm uma OS associada aparecem no resultado.
-        const sql = `
-            SELECT p.*, os.status_os as status_da_os
-            FROM Pagamentos p
-            JOIN os_servicos os ON p.os_servicos = os.id;
-        `;
-        const comando = await executarSQL(sql);
-        res.json(comando);
+        const pagamentos = await executarSQL("select * from pagamentos;");
+        
+        for (const pag of pagamentos) {
+            const [os] = await executarSQL(`select * from os_servicos where id = ${pag.os_servicos};`);
+            pag.ordem_servico = os;
+        }
+        
+        res.json(pagamentos);
     } catch (error) {
         res.json({ mensagem: error.message });
     }

@@ -4,15 +4,19 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
     try {
-        //Esse comando retorna todas as Ordens de Serviço, adicionando o nome do funcionário e os dados do veículo relacionados. Se algum funcionário ou veículo não existir, a OS ainda será exibida, com os campos correspondentes como NULL.
-        const sql = `
-            SELECT os.*, f.nome as funcionario_nome, v.modelo as veiculo_modelo, v.placa as veiculo_placa
-            FROM OS_Servicos os
-            LEFT JOIN funcionarios f ON os.funcionario_id = f.id
-            LEFT JOIN veiculos v ON os.veiculo_id = v.id;
-        `;
-        const comando = await executarSQL(sql);
-        res.json(comando);
+        const ordens = await executarSQL("select * from os_servicos;");
+        
+        for (const os of ordens) {
+            // Busca o objeto completo do Funcionário
+            const [funcionario] = await executarSQL(`select id, nome, cargo_id from funcionarios where id = ${os.funcionario_id};`);
+            // Busca o objeto completo do Veículo
+            const [veiculo] = await executarSQL(`select id, modelo, placa, marca from veiculos where id = ${os.veiculo_id};`);
+            
+            os.funcionario = funcionario;
+            os.veiculo = veiculo;
+        }
+        
+        res.json(ordens);
     } catch (error) {
         res.json({ mensagem: error.message });
     }
