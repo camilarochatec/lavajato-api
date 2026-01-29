@@ -2,6 +2,8 @@
 
 API RESTful desenvolvida para o gerenciamento de um sistema de Lava Jato. Este projeto foi construído com foco em demonstrar **conhecimentos sólidos em SQL nativo** e estruturação de back-end com Node.js, sem a abstração de ORMs, para total controle das queries e performance.
 
+![Image](https://github.com/user-attachments/assets/0b052c6d-a2fb-4f33-96ea-150b6395f09f)
+
 ## 🚀 Tecnologias e Ferramentas
 
 * **Linguagem:** Node.js (JavaScript ES6+)
